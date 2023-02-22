@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Eclipse" />
+    <bytecodeTargetLevel>
+      <module name="GradleSourceCodeManager_main" target="1.8" />
+      <module name="GradleSourceCodeManager_test" target="1.8" />
+      <module name="io-utils_main" target="1.8" />
+      <module name="io-utils_test" target="1.8" />
+      <module name="logger_main" target="1.8" />
+      <module name="logger_test" target="1.8" />
+      <module name="string-utils_main" target="1.8" />
+      <module name="string-utils_test" target="1.8" />
+      <module name="xml-parser_main" target="1.8" />
+      <module name="xml-parser_test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

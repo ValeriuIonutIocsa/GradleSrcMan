@@ -1,0 +1,15 @@
+ext {
+    mainClass = 'com.utils.gradle.AppStart' + project.name
+    projectVersion = '1.0.0'
+    jarFolderPath = 'C:\\IVI\\Apps\\Scripts\\General\\GradleSrcMan'
+
+    subProjectNames = [
+            ':xml-utils'
+    ]
+    compileClassPaths = []
+    compileJarFilePaths = []
+    testCompileClassPaths = []
+    testCompileJarFilePaths = []
+}
+
+apply from: gradle.ext.rootDirPath + '/common_build.gradle'

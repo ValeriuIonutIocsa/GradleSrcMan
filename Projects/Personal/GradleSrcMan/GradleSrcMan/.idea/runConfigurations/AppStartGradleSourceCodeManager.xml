@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="AppStartGradleSourceCodeManager" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.conti.gradle.AppStartGradleSourceCodeManager" />
+    <module name="GradleSourceCodeManager" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../GradleSourceCodeManager_EXE" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.conti.gradle.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
