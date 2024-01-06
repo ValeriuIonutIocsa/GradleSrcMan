@@ -23,11 +23,12 @@ class FolderDeleterImpl implements FolderDeleter {
 	@ApiMethod
 	public boolean deleteFolder(
 			final String folderPathString,
-			final boolean verbose) {
+			final boolean verboseProgress,
+			final boolean verboseError) {
 
 		final boolean success;
 		if (IoUtils.directoryExists(folderPathString)) {
-			success = deleteFolderNoChecks(folderPathString, verbose);
+			success = deleteFolderNoChecks(folderPathString, verboseProgress, verboseError);
 		} else {
 			success = true;
 		}
@@ -38,10 +39,17 @@ class FolderDeleterImpl implements FolderDeleter {
 	@ApiMethod
 	public boolean deleteFolderNoChecks(
 			final String folderPathString,
-			final boolean verbose) {
+			final boolean verboseProgress,
+			final boolean verboseError) {
 
 		boolean success = false;
 		try {
+			if (verboseProgress) {
+
+				Logger.printProgress("deleting folder:");
+				Logger.printLine(folderPathString);
+			}
+
 			final Path folderPath = Paths.get(folderPathString);
 			Files.walkFileTree(folderPath, new SimpleFileVisitor<>() {
 
@@ -51,7 +59,7 @@ class FolderDeleterImpl implements FolderDeleter {
 						final BasicFileAttributes attrs) throws IOException {
 
 					FactoryReadOnlyFlagClearer.getInstance()
-							.clearReadOnlyFlagFileNoChecks(filePath.toString(), true);
+							.clearReadOnlyFlagFileNoChecks(filePath.toString(), false, true);
 					Files.delete(filePath);
 					return FileVisitResult.CONTINUE;
 				}
@@ -69,8 +77,9 @@ class FolderDeleterImpl implements FolderDeleter {
 			success = true;
 
 		} catch (final Exception exc) {
-			if (verbose) {
-				Logger.printError("failed to delete folder:" + System.lineSeparator() + folderPathString);
+			if (verboseError) {
+				Logger.printError("failed to delete folder:" +
+						System.lineSeparator() + folderPathString);
 			}
 			Logger.printException(exc);
 		}
@@ -81,11 +90,12 @@ class FolderDeleterImpl implements FolderDeleter {
 	@ApiMethod
 	public boolean cleanFolder(
 			final String folderPathString,
-			final boolean verbose) {
+			final boolean verboseProgress,
+			final boolean verboseError) {
 
 		final boolean success;
 		if (IoUtils.directoryExists(folderPathString)) {
-			success = cleanFolderNoChecks(folderPathString, verbose);
+			success = cleanFolderNoChecks(folderPathString, verboseProgress, verboseError);
 		} else {
 			success = true;
 		}
@@ -96,10 +106,17 @@ class FolderDeleterImpl implements FolderDeleter {
 	@ApiMethod
 	public boolean cleanFolderNoChecks(
 			final String folderPathString,
-			final boolean verbose) {
+			final boolean verboseProgress,
+			final boolean verboseError) {
 
 		boolean success = false;
 		try {
+			if (verboseProgress) {
+
+				Logger.printProgress("cleaning folder:");
+				Logger.printLine(folderPathString);
+			}
+
 			final Path folderPath = Paths.get(folderPathString);
 			Files.walkFileTree(folderPath, new SimpleFileVisitor<>() {
 
@@ -109,7 +126,7 @@ class FolderDeleterImpl implements FolderDeleter {
 						final BasicFileAttributes attrs) throws IOException {
 
 					FactoryReadOnlyFlagClearer.getInstance()
-							.clearReadOnlyFlagFileNoChecks(filePath.toString(), true);
+							.clearReadOnlyFlagFileNoChecks(filePath.toString(), false, true);
 					Files.delete(filePath);
 					return FileVisitResult.CONTINUE;
 				}
@@ -128,11 +145,16 @@ class FolderDeleterImpl implements FolderDeleter {
 			success = true;
 
 		} catch (final Exception exc) {
-			if (verbose) {
-				Logger.printError("failed to clean folder:" + System.lineSeparator() + folderPathString);
-			}
 			Logger.printException(exc);
 		}
+
+		if (!success) {
+			if (verboseError) {
+				Logger.printError("failed to clean folder:" +
+						System.lineSeparator() + folderPathString);
+			}
+		}
+
 		return success;
 	}
 

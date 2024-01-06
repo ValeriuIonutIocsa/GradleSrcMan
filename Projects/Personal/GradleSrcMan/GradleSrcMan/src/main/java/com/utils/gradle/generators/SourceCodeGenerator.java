@@ -64,7 +64,7 @@ public final class SourceCodeGenerator {
 
 		final String sourceCodeZipFilePathString =
 				PathUtils.computePath(outputFolderPathString, projectName + "_SourcecodeGradle.zip");
-		FactoryFileDeleter.getInstance().deleteFile(sourceCodeZipFilePathString, true);
+		FactoryFileDeleter.getInstance().deleteFile(sourceCodeZipFilePathString, true, false);
 		try (FileSystem zipFileSystem = createZipFileSystem(sourceCodeZipFilePathString)) {
 
 			final Path zipFileRootPath = zipFileSystem.getPath("/");
@@ -101,7 +101,7 @@ public final class SourceCodeGenerator {
 
 		final String sourceCodeZipFilePathString =
 				PathUtils.computePath(outputFolderPathString, projectName + "_SourcecodeCombined.zip");
-		FactoryFileDeleter.getInstance().deleteFile(sourceCodeZipFilePathString, true);
+		FactoryFileDeleter.getInstance().deleteFile(sourceCodeZipFilePathString, true, false);
 		try (FileSystem zipFileSystem = createZipFileSystem(sourceCodeZipFilePathString)) {
 
 			final Path rootZipPath = zipFileSystem.getPath("/");

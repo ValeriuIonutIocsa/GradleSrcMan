@@ -31,7 +31,32 @@ public final class IoUtils {
 	@ApiMethod
 	public static boolean fileExists(
 			final String pathString) {
-		return StringUtils.isNotBlank(pathString) && new File(pathString).exists();
+
+		final boolean fileExists = false;
+		try {
+			return StringUtils.isNotBlank(pathString) && Files.exists(Paths.get(pathString));
+
+		} catch (final Exception ignored) {
+		}
+		return fileExists;
+	}
+
+	/**
+	 * @param pathString
+	 *            the input path
+	 * @return false if the path is null, blank or if the file is a not an existing regular file, true otherwise
+	 */
+	@ApiMethod
+	public static boolean regularFileExists(
+			final String pathString) {
+
+		boolean regularFileExists = false;
+		try {
+			regularFileExists = StringUtils.isNotBlank(pathString) && Files.isRegularFile(Paths.get(pathString));
+
+		} catch (final Exception ignored) {
+		}
+		return regularFileExists;
 	}
 
 	/**
@@ -42,7 +67,14 @@ public final class IoUtils {
 	@ApiMethod
 	public static boolean directoryExists(
 			final String pathString) {
-		return StringUtils.isNotBlank(pathString) && new File(pathString).isDirectory();
+
+		boolean directoryExists = false;
+		try {
+			directoryExists = StringUtils.isNotBlank(pathString) && Files.isDirectory(Paths.get(pathString));
+
+		} catch (final Exception ignored) {
+		}
+		return directoryExists;
 	}
 
 	@ApiMethod

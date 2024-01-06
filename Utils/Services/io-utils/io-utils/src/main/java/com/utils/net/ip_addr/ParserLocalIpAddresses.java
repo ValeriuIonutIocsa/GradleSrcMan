@@ -37,7 +37,7 @@ public class ParserLocalIpAddresses {
 						if (!loopBackAddress) {
 
 							String ipAddress = inetAddress.toString();
-							if (ipAddress.length() > 0 && ipAddress.charAt(0) == '/') {
+							if (!ipAddress.isEmpty() && ipAddress.charAt(0) == '/') {
 								ipAddress = ipAddress.substring(1);
 							}
 							final String displayName = networkInterface.getDisplayName();
@@ -50,7 +50,7 @@ public class ParserLocalIpAddresses {
 			}
 
 		} catch (final Exception exc) {
-			Logger.printLine("failed to parse PC IP addresses!");
+			Logger.printLine("failed to parse PC IP addresses");
 			Logger.printException(exc);
 		}
 	}

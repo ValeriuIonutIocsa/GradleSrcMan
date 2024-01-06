@@ -45,7 +45,7 @@ final class AppStartGradleSrcMan {
 		if (gradleSrcManSettings != null) {
 
 			final String outputFolderPathString =
-					PathUtils.computePath(PathUtils.createRootPath(), "tmp", "GradleSrcMan");
+					PathUtils.computePath(PathUtils.createRootPath(), "IVI_MISC", "Tmp", "GradleSrcMan");
 			Logger.printStatus("Output folder path:" + System.lineSeparator() + outputFolderPathString);
 
 			final List<String> projectPathStringList = gradleSrcManSettings.getProjectPathStringList();
@@ -88,7 +88,7 @@ final class AppStartGradleSrcMan {
 
 						final String outputFolderPathString =
 								PathUtils.computeAbsolutePath(null, null, rootOutputFolderPathString, projectName);
-						FactoryFolderCreator.getInstance().createDirectories(outputFolderPathString, true);
+						FactoryFolderCreator.getInstance().createDirectories(outputFolderPathString, true, false);
 
 						SourceCodeGenerator.work(projectName, valProjectPathString,
 								dependencyTreeProjectPathStringSet, outputFolderPathString);

@@ -57,7 +57,7 @@ public final class DependencyTreeGenerator {
 
 			runGraphVizCommand(dotFilePathString);
 
-			FactoryFileDeleter.getInstance().deleteFile(dotFilePathString, true);
+			FactoryFileDeleter.getInstance().deleteFile(dotFilePathString, true, false);
 
 		} catch (final Exception exc) {
 			Logger.printException(exc);

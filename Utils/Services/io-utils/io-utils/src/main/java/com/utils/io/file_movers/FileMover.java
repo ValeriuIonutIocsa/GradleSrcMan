@@ -8,6 +8,6 @@ public interface FileMover {
 	boolean moveFile(
 			String srcFilePathString,
 			String dstFilePathString,
-			boolean copyAttributes,
-			boolean verbose);
+			boolean verboseProgress,
+			boolean verboseError);
 }

@@ -2,7 +2,7 @@
     <configuration default="false" factoryName="Gradle" folderName="GradleSrcMan" name="GradleSrcMan [fatJar sourcesJar]" type="GradleRunConfiguration">
         <ExternalSystemSettings>
             <option name="executionName"/>
-            <option name="externalProjectPath" value="$PROJECT_DIR$/../../GradleSrcMan/GradleSrcMan"/>
+            <option name="externalProjectPath" value="$PROJECT_DIR$/../../../../Projects/Personal/GradleSrcMan/GradleSrcMan"/>
             <option name="externalSystemIdString" value="GRADLE"/>
             <option name="scriptParameters" value=""/>
             <option name="taskDescriptions">

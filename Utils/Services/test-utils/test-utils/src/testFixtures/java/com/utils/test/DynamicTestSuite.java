@@ -2,6 +2,7 @@ package com.utils.test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
@@ -14,32 +15,36 @@ public class DynamicTestSuite {
 	}
 
 	private final Mode mode;
-	private final Executable executable;
+	private final Runnable runnable;
 	private final DynamicTestOptions<?>[] dynamicTestOptionsArray;
 
 	public DynamicTestSuite(
 			final Mode mode,
-			final Executable executable,
+			final Runnable runnable,
 			final DynamicTestOptions<?>... dynamicTestOptionsArray) {
 
 		this.mode = mode;
-		this.executable = executable;
+		this.runnable = runnable;
 		this.dynamicTestOptionsArray = dynamicTestOptionsArray;
 	}
 
 	public List<DynamicTest> createDynamicTestList() {
 
-		if (executable == null) {
+		if (runnable == null) {
 
-			System.err.println("ERROR - no executable is configured");
+			System.err.println("ERROR - no runnable is configured");
 			Assertions.fail();
 		}
 
 		final List<DynamicTest> dynamicTestList = new ArrayList<>();
 		if (mode == Mode.ALL) {
-			addDynamicTestsRec(0, dynamicTestList);
+
+			final Stack<Integer> indexStack = new Stack<>();
+			addDynamicTestsRec(0, indexStack, dynamicTestList);
+
 		} else if (mode == Mode.SELECTED) {
-			addDynamicTest(dynamicTestList);
+			addDynamicTest(runnable::run, dynamicTestList);
+
 		} else {
 			System.err.println("ERROR - invalid mode");
 			Assertions.fail();
@@ -49,10 +54,23 @@ public class DynamicTestSuite {
 
 	private void addDynamicTestsRec(
 			final int optionsIndex,
+			final Stack<Integer> indexStack,
 			final List<DynamicTest> dynamicTestList) {
 
 		if (optionsIndex == dynamicTestOptionsArray.length) {
-			addDynamicTest(dynamicTestList);
+
+			final List<Integer> indexList = new ArrayList<>(indexStack);
+			addDynamicTest(() -> {
+
+				for (int i = 0; i < dynamicTestOptionsArray.length; i++) {
+
+					final DynamicTestOptions<?> dynamicTestOptions = dynamicTestOptionsArray[i];
+					final int index = indexList.get(i);
+					dynamicTestOptions.setSelectedOptionIndex(index);
+				}
+				runnable.run();
+
+			}, dynamicTestList);
 
 		} else {
 			final DynamicTestOptions<?> dynamicTestOptions = dynamicTestOptionsArray[optionsIndex];
@@ -62,12 +80,15 @@ public class DynamicTestSuite {
 
 				final int index = dynamicTestOption.getIndex();
 				dynamicTestOptions.setSelectedOptionIndex(index);
-				addDynamicTestsRec(optionsIndex + 1, dynamicTestList);
+				indexStack.push(index);
+				addDynamicTestsRec(optionsIndex + 1, indexStack, dynamicTestList);
+				indexStack.pop();
 			}
 		}
 	}
 
 	private void addDynamicTest(
+			final Executable executable,
 			final List<DynamicTest> dynamicTestList) {
 
 		final List<String> optionsDisplayNameList = new ArrayList<>();

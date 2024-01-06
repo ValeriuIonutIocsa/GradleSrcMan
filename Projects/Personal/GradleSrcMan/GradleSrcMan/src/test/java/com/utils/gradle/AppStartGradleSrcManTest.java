@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import com.utils.io.PathUtils;
 import com.utils.log.Logger;
+import com.utils.string.StrUtils;
 
 class AppStartGradleSrcManTest {
 
@@ -11,7 +12,7 @@ class AppStartGradleSrcManTest {
 	void work() {
 
 		final String projectPathString;
-		final int input = Integer.parseInt("11");
+		final int input = StrUtils.tryParsePositiveInt("11");
 		if (input == 1) {
 			projectPathString = "C:\\IVI\\Prog\\JavaGradle\\UtilsManager\\" +
 					"Projects\\Personal\\UtilsManagerAllModules\\UtilsManagerAllModules";
@@ -25,7 +26,7 @@ class AppStartGradleSrcManTest {
 		}
 
 		final String rootOutputFolderPathString =
-				PathUtils.computePath(PathUtils.createRootPath(), "tmp", "GradleSrcMan");
+				PathUtils.computePath(PathUtils.createRootPath(), "IVI_MISC", "Tmp", "GradleSrcMan");
 		Logger.printStatus("Output folder path:" + System.lineSeparator() + rootOutputFolderPathString);
 
 		AppStartGradleSrcMan.work(projectPathString, rootOutputFolderPathString);

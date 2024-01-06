@@ -36,7 +36,7 @@ public class InputStreamReaderThread extends Thread {
 			}
 
 		} catch (final Exception exc) {
-			Logger.printError("error occurred while reading from the input stream!");
+			Logger.printError("error occurred while reading from the input stream");
 			Logger.printException(exc);
 		}
 	}

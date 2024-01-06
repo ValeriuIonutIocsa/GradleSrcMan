@@ -5,8 +5,10 @@ import com.utils.annotations.ApiMethod;
 public interface FolderCopier {
 
 	@ApiMethod
-	void copyFolder(
+	boolean copyFolder(
 			String srcFolderPathString,
 			String dstFolderPathString,
-			boolean verbose);
+			boolean deleteDirectoryBeforeCopying,
+			boolean verboseProgress,
+			boolean verboseError);
 }

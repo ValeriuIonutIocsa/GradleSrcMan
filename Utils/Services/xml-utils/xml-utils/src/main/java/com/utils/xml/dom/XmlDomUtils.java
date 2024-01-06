@@ -57,13 +57,44 @@ public final class XmlDomUtils {
 	}
 
 	@ApiMethod
-	public static ValidatedDocument openAndValidateDocument(
+	public static ValidatedDocument openAndValidateDocumentResourceSchema(
+			final InputStream inputStream,
+			final String schemaResourceFilePathString) throws Exception {
+
+		final DocumentBuilderFactory documentBuilderFactory = createDocumentBuilderFactory();
+		return new DocumentOpenerInputStream(inputStream, null)
+				.openAndValidateDocumentResourceSchema(documentBuilderFactory, schemaResourceFilePathString);
+	}
+
+	@ApiMethod
+	public static ValidatedDocument openAndValidateDocumentLocalSchema(
 			final InputStream inputStream,
 			final String schemaFolderPathString) throws Exception {
 
 		final DocumentBuilderFactory documentBuilderFactory = createDocumentBuilderFactory();
 		return new DocumentOpenerInputStream(inputStream, schemaFolderPathString)
-				.openAndValidateDocument(documentBuilderFactory);
+				.openAndValidateDocumentLocalSchema(documentBuilderFactory);
+	}
+
+	@ApiMethod
+	public static ValidatedDocument openAndValidateDocumentResourceSchema(
+			final String filePathString,
+			final String schemaResourceFilePathString) throws Exception {
+
+		final DocumentBuilderFactory documentBuilderFactory = createDocumentBuilderFactory();
+		final File file = new File(filePathString);
+		return new DocumentOpenerFile(file)
+				.openAndValidateDocumentResourceSchema(documentBuilderFactory, schemaResourceFilePathString);
+	}
+
+	@ApiMethod
+	public static ValidatedDocument openAndValidateDocumentLocalSchema(
+			final String filePathString) throws Exception {
+
+		final DocumentBuilderFactory documentBuilderFactory = createDocumentBuilderFactory();
+		final File file = new File(filePathString);
+		return new DocumentOpenerFile(file)
+				.openAndValidateDocumentLocalSchema(documentBuilderFactory);
 	}
 
 	@ApiMethod
@@ -73,15 +104,6 @@ public final class XmlDomUtils {
 		final DocumentBuilderFactory documentBuilderFactory = createDocumentBuilderFactory();
 		final File file = new File(filePathString);
 		return new DocumentOpenerFile(file).openDocument(documentBuilderFactory);
-	}
-
-	@ApiMethod
-	public static ValidatedDocument openAndValidateDocument(
-			final String filePathString) throws Exception {
-
-		final DocumentBuilderFactory documentBuilderFactory = createDocumentBuilderFactory();
-		final File file = new File(filePathString);
-		return new DocumentOpenerFile(file).openAndValidateDocument(documentBuilderFactory);
 	}
 
 	private static DocumentBuilderFactory createDocumentBuilderFactory() {
@@ -105,8 +127,8 @@ public final class XmlDomUtils {
 			final int indentAmount,
 			final String outputPathString) throws Exception {
 
-		FactoryFolderCreator.getInstance().createParentDirectories(outputPathString, true);
-		FactoryReadOnlyFlagClearer.getInstance().clearReadOnlyFlagFile(outputPathString, true);
+		FactoryFolderCreator.getInstance().createParentDirectories(outputPathString, false, true);
+		FactoryReadOnlyFlagClearer.getInstance().clearReadOnlyFlagFile(outputPathString, false, true);
 
 		final StreamResult streamResult = new StreamResult(outputPathString);
 		saveXml(document, omitXmlDeclaration, indentAmount, streamResult);
@@ -180,7 +202,7 @@ public final class XmlDomUtils {
 
 				final String nodeValue = childNode.getNodeValue();
 				final String trimmedNodeVal = nodeValue.trim();
-				if (trimmedNodeVal.length() == 0) {
+				if (trimmedNodeVal.isEmpty()) {
 					parentNode.removeChild(childNode);
 				} else {
 					childNode.setNodeValue(trimmedNodeVal);
@@ -288,6 +310,20 @@ public final class XmlDomUtils {
 	}
 
 	@ApiMethod
+	public static String computeAttributeValue(
+			final Element parentElement,
+			final String tagName,
+			final String attributeName) {
+
+		String attributeValue = "";
+		final Element element = XmlDomUtils.getFirstElementByTagName(parentElement, tagName);
+		if (element != null) {
+			attributeValue = element.getAttribute(attributeName);
+		}
+		return attributeValue;
+	}
+
+	@ApiMethod
 	public static List<Attr> getAttributes(
 			final Element element) {
 
@@ -368,6 +404,54 @@ public final class XmlDomUtils {
 		childElement.setTextContent(textContent);
 
 		parentElement.appendChild(childElement);
+	}
+
+	@ApiMethod
+	public static void cloneNode(
+			final Node srcNode,
+			final Node destNode) {
+
+		removeAllAttributes(destNode);
+
+		final NamedNodeMap srcAttributesMap = srcNode.getAttributes();
+		final NamedNodeMap dstAttributesMap = destNode.getAttributes();
+		for (int i = 0; i < srcAttributesMap.getLength(); i++) {
+
+			final Node attrNode = srcAttributesMap.item(i);
+			final Document document = destNode.getOwnerDocument();
+			final Node importedAttrNode = document.importNode(attrNode, true);
+			dstAttributesMap.setNamedItem(importedAttrNode);
+		}
+
+		removeAllChildren(destNode);
+
+		final NodeList srcChildNodeList = srcNode.getChildNodes();
+		for (int i = 0; i < srcChildNodeList.getLength(); i++) {
+
+			final Node childNode = srcChildNodeList.item(i);
+			final Document document = destNode.getOwnerDocument();
+			final Node importedChildNode = document.importNode(childNode, true);
+			destNode.appendChild(importedChildNode);
+		}
+	}
+
+	@ApiMethod
+	public static void removeAllAttributes(
+			final Node node) {
+
+		final List<String> attributeNameList = new ArrayList<>();
+
+		final NamedNodeMap attributeMap = node.getAttributes();
+		for (int i = 0; i < attributeMap.getLength(); i++) {
+
+			final Attr attr = (Attr) attributeMap.item(i);
+			final String name = attr.getName();
+			attributeNameList.add(name);
+		}
+
+		for (final String attributeName : attributeNameList) {
+			attributeMap.removeNamedItem(attributeName);
+		}
 	}
 
 	@ApiMethod

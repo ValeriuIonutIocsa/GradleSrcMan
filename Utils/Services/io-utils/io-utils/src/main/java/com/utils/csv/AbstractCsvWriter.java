@@ -6,9 +6,9 @@ import java.nio.charset.StandardCharsets;
 import org.apache.commons.lang3.StringUtils;
 
 import com.utils.annotations.ApiMethod;
+import com.utils.io.StreamUtils;
 import com.utils.io.folder_creators.FactoryFolderCreator;
 import com.utils.io.ro_flag_clearers.FactoryReadOnlyFlagClearer;
-import com.utils.io.StreamUtils;
 import com.utils.log.Logger;
 
 public abstract class AbstractCsvWriter implements CsvWriter {
@@ -35,8 +35,8 @@ public abstract class AbstractCsvWriter implements CsvWriter {
 			Logger.printLine(outputPathString);
 		}
 
-		FactoryFolderCreator.getInstance().createParentDirectories(outputPathString, true);
-		FactoryReadOnlyFlagClearer.getInstance().clearReadOnlyFlagFile(outputPathString, true);
+		FactoryFolderCreator.getInstance().createParentDirectories(outputPathString, false, true);
+		FactoryReadOnlyFlagClearer.getInstance().clearReadOnlyFlagFile(outputPathString, false, true);
 		try (PrintStream printStream = StreamUtils.openPrintStream(
 				outputPathString, false, StandardCharsets.UTF_8)) {
 
