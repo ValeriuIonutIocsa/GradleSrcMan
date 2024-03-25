@@ -4,6 +4,7 @@ ext {
     jarFolderPath = 'C:\\IVI\\Apps\\Scripts\\General\\GradleSrcMan'
 
     subProjectNames = [
+            ':gradle-utils',
             ':xml-utils'
     ]
     compileClassPaths = []

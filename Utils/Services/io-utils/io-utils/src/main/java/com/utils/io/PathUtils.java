@@ -345,6 +345,23 @@ public final class PathUtils {
 	}
 
 	@ApiMethod
+	public static String tryComputeRelativePath(
+			final String fromPathString,
+			final String toPathString) {
+
+		String relativePathString = toPathString;
+		try {
+			final Path fromPath = Paths.get(fromPathString);
+			final Path toPath = Paths.get(toPathString);
+			final Path relativePath = fromPath.relativize(toPath);
+			relativePathString = relativePath.toString();
+
+		} catch (final Exception ignored) {
+		}
+		return relativePathString;
+	}
+
+	@ApiMethod
 	public static boolean checkAbsolutePath(
 			final String pathString) {
 

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,6 +16,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.utils.annotations.ApiMethod;
+import com.utils.io.processes.InputStreamReaderThread;
+import com.utils.io.processes.ReadBytesHandlerLinesPrint;
 import com.utils.log.Logger;
 import com.utils.string.StrUtils;
 
@@ -210,11 +213,19 @@ public final class IoUtils {
 
 		boolean success = false;
 		try {
-			final ProcessBuilder processBuilder = new ProcessBuilder();
-			processBuilder.command("cmd", "/c", "start", filePathString);
-			processBuilder.inheritIO();
-			final Process process = processBuilder.start();
+			final Process process = new ProcessBuilder()
+					.command("cmd", "/c", "start", filePathString)
+					.redirectErrorStream(true)
+					.start();
+
+			final InputStreamReaderThread inputStreamReaderThread = new InputStreamReaderThread(
+					"open file with default app input stream reader", process.getInputStream(),
+					StandardCharsets.UTF_8, new ReadBytesHandlerLinesPrint());
+			inputStreamReaderThread.start();
+
 			final int exitCode = process.waitFor();
+			inputStreamReaderThread.join();
+
 			success = exitCode == 0;
 
 		} catch (final Exception exc) {

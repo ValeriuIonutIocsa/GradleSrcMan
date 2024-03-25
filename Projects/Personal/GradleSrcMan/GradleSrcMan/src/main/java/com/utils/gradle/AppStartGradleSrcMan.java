@@ -1,7 +1,5 @@
 package com.utils.gradle;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +18,6 @@ import com.utils.gradle.settings.GradleSrcManSettings;
 import com.utils.io.IoUtils;
 import com.utils.io.PathUtils;
 import com.utils.io.folder_creators.FactoryFolderCreator;
-import com.utils.io.processes.InputStreamReaderThread;
-import com.utils.io.processes.ReadBytesHandlerLinesCollect;
 import com.utils.log.Logger;
 
 final class AppStartGradleSrcMan {
@@ -74,28 +70,22 @@ final class AppStartGradleSrcMan {
 				final String valProjectPathString = PathUtils.computePath(projectPathString);
 				if (valProjectPathString != null) {
 
-					final List<String> subProjectDependencyTreeOutputLineList =
-							executeSubProjectDependencyTreeCommand(valProjectPathString);
-					if (subProjectDependencyTreeOutputLineList != null) {
+					final Set<String> dependencyTreeProjectPathStringSet = new LinkedHashSet<>();
+					dependencyTreeProjectPathStringSet.add(valProjectPathString);
+					final List<Node> nodeList = new ArrayList<>();
+					final Set<String> dependencySet = new LinkedHashSet<>();
+					ProjectDependenciesAnalyzer.work(valProjectPathString,
+							dependencyTreeProjectPathStringSet, nodeList, dependencySet);
 
-						final Set<String> dependencyTreeProjectPathStringSet = new LinkedHashSet<>();
-						dependencyTreeProjectPathStringSet.add(valProjectPathString);
-						final List<Node> nodeList = new ArrayList<>();
-						final Set<String> dependencySet = new LinkedHashSet<>();
-						ProjectDependenciesAnalyzer.work(
-								valProjectPathString, subProjectDependencyTreeOutputLineList,
-								dependencyTreeProjectPathStringSet, nodeList, dependencySet);
+					final String outputFolderPathString =
+							PathUtils.computeAbsolutePath(null, null, rootOutputFolderPathString, projectName);
+					FactoryFolderCreator.getInstance().createDirectories(outputFolderPathString, true, false);
 
-						final String outputFolderPathString =
-								PathUtils.computeAbsolutePath(null, null, rootOutputFolderPathString, projectName);
-						FactoryFolderCreator.getInstance().createDirectories(outputFolderPathString, true, false);
+					SourceCodeGenerator.work(projectName, valProjectPathString,
+							dependencyTreeProjectPathStringSet, outputFolderPathString);
 
-						SourceCodeGenerator.work(projectName, valProjectPathString,
-								dependencyTreeProjectPathStringSet, outputFolderPathString);
-
-						DependencyTreeGenerator.work(
-								projectName, nodeList, dependencySet, outputFolderPathString);
-					}
+					DependencyTreeGenerator.work(
+							projectName, nodeList, dependencySet, outputFolderPathString);
 				}
 			}
 
@@ -104,27 +94,5 @@ final class AppStartGradleSrcMan {
 					"on project " + projectName);
 			Logger.printException(exc);
 		}
-	}
-
-	private static List<String> executeSubProjectDependencyTreeCommand(
-			final String projectPathString) {
-
-		List<String> subProjectDependencyTreeOutputLineList = null;
-		try {
-			final String[] command = { "cmd", "/c", "gradlew.bat", "subProjectDependencyTree" };
-			final ProcessBuilder processBuilder = new ProcessBuilder(command)
-					.directory(new File(projectPathString))
-					.redirectErrorStream(true);
-			final Process process = processBuilder.start();
-			final ReadBytesHandlerLinesCollect readBytesHandlerLinesCollect = new ReadBytesHandlerLinesCollect();
-			new InputStreamReaderThread("subProjectDependencyTree",
-					process.getInputStream(), StandardCharsets.UTF_8, readBytesHandlerLinesCollect).start();
-			process.waitFor();
-			subProjectDependencyTreeOutputLineList = readBytesHandlerLinesCollect.getLineList();
-
-		} catch (final Exception exc) {
-			Logger.printException(exc);
-		}
-		return subProjectDependencyTreeOutputLineList;
 	}
 }

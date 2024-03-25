@@ -18,7 +18,7 @@ class SplitFileUtilsTest {
 			sizeOfChunk = 400 * 1024 * 1024;
 
 		} else if (input == 2) {
-			filePathString = "D:\\tmp\\ProjectAnalyzer\\Outputs\\FS_DAMDA_000U0_000.txt";
+			filePathString = "D:\\VT_IVI_MISC\\Tmp\\CRO\\ProjectAnalyzer\\Outputs\\FS_DAMDA_000U0_000.txt";
 			sizeOfChunk = 200 * 1024 * 1024;
 
 		} else {

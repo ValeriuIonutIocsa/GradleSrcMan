@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
-
+import com.personal.utils.gradle.sub_prj.FactoryGradleSubProject;
+import com.personal.utils.gradle.sub_prj.GradleSubProject;
 import com.utils.gradle.analyzers.data.Node;
 import com.utils.io.PathUtils;
 import com.utils.log.Logger;
@@ -22,49 +22,35 @@ public final class ProjectDependenciesAnalyzer {
 
 	public static void work(
 			final String projectPathString,
-			final List<String> subProjectDependencyTreeOutputLineList,
 			final Set<String> projectPathStringSet,
 			final List<Node> nodeList,
 			final Set<String> dependencySet) {
 
 		final Map<Integer, Set<Integer>> directDependenciesMap = new HashMap<>();
-		final Map<Integer, String> levelsInTreeMap = new HashMap<>();
-		levelsInTreeMap.put(-1, projectPathString);
 		final Map<String, Node> nodesByProjectNameMap = new LinkedHashMap<>();
-		boolean insideRegion = false;
-		for (final String line : subProjectDependencyTreeOutputLineList) {
 
-			if (!StringUtils.endsWith(line, " SKIPPED") &&
-					StringUtils.contains(line, ":subProjectDependencyTree")) {
-				insideRegion = true;
+		final Map<String, GradleSubProject> gradleSubProjectsByPathMap = new LinkedHashMap<>();
+		FactoryGradleSubProject.newInstance(projectPathString, gradleSubProjectsByPathMap);
 
-			} else {
-				if (StringUtils.isBlank(line)) {
-					insideRegion = false;
-				}
+		for (final GradleSubProject gradleSubProject : gradleSubProjectsByPathMap.values()) {
 
-				if (insideRegion) {
+			final String subProjectPathString = gradleSubProject.getPath();
+			projectPathStringSet.add(subProjectPathString);
 
-					final String dependencyPathString = line.trim();
-					projectPathStringSet.add(dependencyPathString);
-					final int levelInTree = line.length() - dependencyPathString.length();
-					levelsInTreeMap.put(levelInTree, dependencyPathString);
+			final Set<String> dependencyPathSet = gradleSubProject.getDependencyPathSet();
+			for (final String dependencySubProjectPathString : dependencyPathSet) {
 
-					final int parentLevel = levelInTree - 1;
-					final String parentDependencyPathString = levelsInTreeMap.get(parentLevel);
+				final Node parentNode = computeNode(subProjectPathString, nodesByProjectNameMap);
+				final Node node = computeNode(dependencySubProjectPathString, nodesByProjectNameMap);
 
-					final Node parentNode = computeNode(parentDependencyPathString, nodesByProjectNameMap);
-					final Node node = computeNode(dependencyPathString, nodesByProjectNameMap);
+				final int parentNodeIndex = parentNode.getIndex();
+				final Set<Integer> nodeIndexSet =
+						directDependenciesMap.computeIfAbsent(parentNodeIndex, k -> new HashSet<>());
+				final int nodeIndex = node.getIndex();
+				nodeIndexSet.add(nodeIndex);
 
-					final int parentNodeIndex = parentNode.getIndex();
-					final Set<Integer> nodeIndexSet =
-							directDependenciesMap.computeIfAbsent(parentNodeIndex, k -> new HashSet<>());
-					final int nodeIndex = node.getIndex();
-					nodeIndexSet.add(nodeIndex);
-
-					final String dependency = "n" + parentNodeIndex + " -> n" + nodeIndex;
-					dependencySet.add(dependency);
-				}
+				final String dependency = "n" + parentNodeIndex + " -> n" + nodeIndex;
+				dependencySet.add(dependency);
 			}
 		}
 
