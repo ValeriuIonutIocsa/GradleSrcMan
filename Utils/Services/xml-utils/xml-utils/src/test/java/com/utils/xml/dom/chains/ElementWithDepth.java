@@ -35,11 +35,10 @@ class ElementWithDepth {
 			final Node node,
 			final List<String> chainedElementList) {
 
-		if (node instanceof Element) {
+		if (node instanceof final Element element) {
 
-			final Element element = (Element) node;
 			final String chainedElement = elementToString(element);
-			chainedElementList.add(0, chainedElement);
+			chainedElementList.addFirst(chainedElement);
 		}
 
 		final Node parentNode = node.getParentNode();
@@ -62,9 +61,8 @@ class ElementWithDepth {
 		for (int i = 0; i < length; i++) {
 
 			final Node attributeNode = attributes.item(i);
-			if (attributeNode instanceof Attr) {
+			if (attributeNode instanceof final Attr attr) {
 
-				final Attr attr = (Attr) attributeNode;
 				final String attrName = attr.getName();
 				final String attrValue = attr.getValue();
 
@@ -72,10 +70,10 @@ class ElementWithDepth {
 				sbElementString.append(attrName);
 				sbElementString.append("=\"");
 				sbElementString.append(attrValue);
-                sbElementString.append('"');
+				sbElementString.append('"');
 			}
 		}
-        sbElementString.append('>');
+		sbElementString.append('>');
 		return sbElementString.toString();
 	}
 

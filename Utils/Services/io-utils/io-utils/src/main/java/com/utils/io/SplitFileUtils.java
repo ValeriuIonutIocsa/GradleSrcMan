@@ -3,6 +3,7 @@ package com.utils.io;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
+import com.utils.annotations.ApiMethod;
 import com.utils.log.Logger;
 
 public final class SplitFileUtils {
@@ -10,6 +11,7 @@ public final class SplitFileUtils {
 	private SplitFileUtils() {
 	}
 
+	@ApiMethod
 	public static void splitFile(
 			final String filePathString,
 			final long sizeOfChunk) {

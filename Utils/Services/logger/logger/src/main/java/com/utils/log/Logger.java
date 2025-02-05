@@ -3,6 +3,9 @@ package com.utils.log;
 import java.time.Duration;
 import java.time.Instant;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
+
 import com.utils.annotations.ApiMethod;
 import com.utils.string.StrUtils;
 import com.utils.string.gradle.GradleUtils;
@@ -31,6 +34,7 @@ public final class Logger {
 
 	@ApiMethod
 	public static void printNewLine() {
+
 		printLine("");
 	}
 
@@ -45,6 +49,7 @@ public final class Logger {
 	@ApiMethod
 	public static void printLine(
 			final String message) {
+
 		printMessage(MessageLevel.INFO, message);
 	}
 
@@ -76,6 +81,7 @@ public final class Logger {
 	@ApiMethod
 	public static void printStatus(
 			final String message) {
+
 		printMessage(MessageLevel.STATUS, message);
 	}
 
@@ -154,6 +160,7 @@ public final class Logger {
 	@ApiMethod
 	public static void printFinishMessage(
 			final Instant start) {
+
 		printFinishMessage("Done.", start);
 	}
 
@@ -169,18 +176,21 @@ public final class Logger {
 	@ApiMethod
 	public static void printToBeImplemented(
 			final String name) {
+
 		printLine(name + " (to be implemented...)");
 	}
 
 	@ApiMethod
 	public static void printDebugLine(
 			final Object message) {
+
 		printMessage(MessageLevel.INFO, String.valueOf(message));
 	}
 
 	@ApiMethod
 	public static void printDebugError(
 			final Object message) {
+
 		printMessage(MessageLevel.ERROR, String.valueOf(message));
 	}
 
@@ -195,7 +205,10 @@ public final class Logger {
 	private static void printMessage(
 			final MessageLevel info,
 			final String message) {
-		messageConsumer.printMessage(info, message);
+
+		final String processedMessage =
+				StringUtils.replace(message, SystemUtils.USER_HOME, "%USERPROFILE%");
+		messageConsumer.printMessage(info, processedMessage);
 	}
 
 	@ApiMethod

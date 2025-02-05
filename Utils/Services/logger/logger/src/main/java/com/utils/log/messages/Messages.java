@@ -1,5 +1,6 @@
 package com.utils.log.messages;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,6 +10,7 @@ import com.utils.string.StrUtils;
 
 public class Messages implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = -7658013346641279882L;
 
 	private final List<Message> messageList;

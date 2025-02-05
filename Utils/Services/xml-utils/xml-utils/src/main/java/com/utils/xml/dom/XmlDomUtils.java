@@ -190,22 +190,25 @@ public final class XmlDomUtils {
 	public static void processTextNodesRec(
 			final Node parentNode) {
 
-		final NodeList nodeList = parentNode.getChildNodes();
-		for (int i = nodeList.getLength() - 1; i >= 0; i--) {
+		if (parentNode != null) {
 
-			final Node childNode = nodeList.item(i);
-			final int nodeType = childNode.getNodeType();
-			if (nodeType == Node.ELEMENT_NODE) {
-				processTextNodesRec(childNode);
+			final NodeList nodeList = parentNode.getChildNodes();
+			for (int i = nodeList.getLength() - 1; i >= 0; i--) {
 
-			} else if (nodeType == Node.TEXT_NODE) {
+				final Node childNode = nodeList.item(i);
+				final int nodeType = childNode.getNodeType();
+				if (nodeType == Node.ELEMENT_NODE) {
+					processTextNodesRec(childNode);
 
-				final String nodeValue = childNode.getNodeValue();
-				final String trimmedNodeVal = nodeValue.trim();
-				if (trimmedNodeVal.isEmpty()) {
-					parentNode.removeChild(childNode);
-				} else {
-					childNode.setNodeValue(trimmedNodeVal);
+				} else if (nodeType == Node.TEXT_NODE) {
+
+					final String nodeValue = childNode.getNodeValue();
+					final String trimmedNodeVal = nodeValue.trim();
+					if (trimmedNodeVal.isEmpty()) {
+						parentNode.removeChild(childNode);
+					} else {
+						childNode.setNodeValue(trimmedNodeVal);
+					}
 				}
 			}
 		}
@@ -520,5 +523,38 @@ public final class XmlDomUtils {
 				(DOMImplementationLS) document.getImplementation();
 		final LSSerializer lsSerializer = domImplementationLS.createLSSerializer();
 		return lsSerializer.writeToString(node);
+	}
+
+	@ApiMethod
+	public static String computeNodeXmlPath(
+			final Node node) {
+
+		return computeNodeXmlPathRec(node, "");
+	}
+
+	private static String computeNodeXmlPathRec(
+			final Node node,
+			final String childNodeXmlPath) {
+
+		final String nodeXmlPath;
+		if (node == null) {
+			nodeXmlPath = "";
+
+		} else {
+			final Node parent = node.getParentNode();
+			if (parent == null) {
+				nodeXmlPath = childNodeXmlPath;
+
+			} else {
+				final String elementName;
+				if (node instanceof final Element element) {
+					elementName = element.getTagName();
+				} else {
+					elementName = "";
+				}
+				nodeXmlPath = computeNodeXmlPathRec(parent, "/" + elementName + childNodeXmlPath);
+			}
+		}
+		return nodeXmlPath;
 	}
 }

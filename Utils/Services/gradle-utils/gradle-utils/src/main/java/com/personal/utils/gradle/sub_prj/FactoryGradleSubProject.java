@@ -1,11 +1,12 @@
 package com.personal.utils.gradle.sub_prj;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.utils.io.PathUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import com.utils.log.Logger;
+import com.utils.string.StrUtils;
 
 public final class FactoryGradleSubProject {
 
@@ -13,42 +14,32 @@ public final class FactoryGradleSubProject {
 	}
 
 	public static void newInstance(
-			final String projectPathString,
+			final String rootProjectPathString,
 			final Map<String, GradleSubProject> gradleSubProjectsByPathMap) {
 
 		try {
-			final GradleSubProject rootGradleSubProject = new GradleSubProject(projectPathString);
-			gradleSubProjectsByPathMap.put(projectPathString, rootGradleSubProject);
-
 			final List<String> lineList =
-					GradleSubProjectUtils.executeSubProjectDependencyTreeCommand(projectPathString);
+					GradleSubProjectUtils.executeSubProjectDependencyTreeCommand(rootProjectPathString);
 			if (lineList != null) {
 
-				final Map<Integer, String> levelsInTreeMap = new HashMap<>();
-				levelsInTreeMap.put(-1, projectPathString);
-
-				final String projectRootFolderPathString = PathUtils.computeParentPath(projectPathString, 4);
+				GradleSubProject gradleSubProject = null;
 				for (final String line : lineList) {
 
-					final String subProjectPathString = line.trim();
-					if (subProjectPathString.startsWith(projectRootFolderPathString)) {
+					final String projectPathString = StrUtils.removePrefix(line, "project: ");
+					if (!StringUtils.equals(projectPathString, line)) {
 
-						final GradleSubProject gradleSubProject =
-								new GradleSubProject(subProjectPathString);
-						gradleSubProjectsByPathMap.put(subProjectPathString, gradleSubProject);
+						gradleSubProject = new GradleSubProject(projectPathString);
+						gradleSubProjectsByPathMap.put(projectPathString, gradleSubProject);
 
-						final int levelInTree = line.length() - subProjectPathString.length();
-						levelsInTreeMap.put(levelInTree, subProjectPathString);
+					} else {
+						if (gradleSubProject != null) {
 
-						final int parentLevel = levelInTree - 1;
-						final String parentSubProjectPathString = levelsInTreeMap.get(parentLevel);
+							final String subProjectPathString = StrUtils.removePrefix(line, "subProject: ");
+							if (!StringUtils.equals(subProjectPathString, line)) {
 
-						GradleSubProject parentGradleSubProject =
-								gradleSubProjectsByPathMap.get(parentSubProjectPathString);
-						if (parentGradleSubProject == null) {
-							parentGradleSubProject = rootGradleSubProject;
+								gradleSubProject.getDependencyPathSet().add(subProjectPathString);
+							}
 						}
-						parentGradleSubProject.getDependencyPathSet().add(subProjectPathString);
 					}
 				}
 			}

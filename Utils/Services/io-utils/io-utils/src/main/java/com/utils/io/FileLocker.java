@@ -1,17 +1,13 @@
 package com.utils.io;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.nio.charset.StandardCharsets;
 
 import com.utils.annotations.ApiMethod;
-import com.utils.io.file_creators.FactoryFileCreator;
 import com.utils.io.file_deleters.FactoryFileDeleter;
-import com.utils.io.folder_creators.FactoryFolderCreator;
-import com.utils.io.ro_flag_clearers.FactoryReadOnlyFlagClearer;
 import com.utils.log.Logger;
 import com.utils.string.StrUtils;
 
@@ -38,31 +34,26 @@ public class FileLocker {
 		boolean success = true;
 		try {
 			Logger.printProgress("acquiring " + lockerName + " file lock");
-
-			if (IoUtils.fileExists(lockFilePathString)) {
-				try {
-					final String text;
-					if (lockerName != null) {
-						text = "locked by " + lockerName;
-					} else {
-						text = "locked";
-					}
-					WriterUtils.stringToFile(text, StandardCharsets.UTF_8, lockFilePathString);
-
-				} catch (final Exception ignored) {
-					success = false;
+			try {
+				final String text;
+				if (lockerName != null) {
+					text = "locked by " + lockerName;
+				} else {
+					text = "locked";
 				}
-				if (success) {
-					lockExistingFile();
+				try (BufferedWriter bufferedWriter = WriterUtils.openBufferedWriter(lockFilePathString)) {
+					bufferedWriter.write(text);
 				}
 
-			} else {
-				FactoryFolderCreator.getInstance()
-						.createParentDirectories(lockFilePathString, false, true);
-				FactoryReadOnlyFlagClearer.getInstance()
-						.clearReadOnlyFlagFile(lockFilePathString, false, true);
-				FactoryFileCreator.getInstance().createFile(lockFilePathString, false, true);
-				lockExistingFile();
+			} catch (final Exception ignored) {
+				success = false;
+			}
+			if (success) {
+
+				final File lockFile = new File(lockFilePathString);
+				randomAccessFile = new RandomAccessFile(lockFile, "rw");
+				fileChannel = randomAccessFile.getChannel();
+				fileLock = fileChannel.lock();
 			}
 
 		} catch (final Exception exc) {
@@ -70,14 +61,6 @@ public class FileLocker {
 			Logger.printException(exc);
 		}
 		return success;
-	}
-
-	private void lockExistingFile() throws IOException {
-
-		final File lockFile = new File(lockFilePathString);
-		randomAccessFile = new RandomAccessFile(lockFile, "rw");
-		fileChannel = randomAccessFile.getChannel();
-		fileLock = fileChannel.lock();
 	}
 
 	@ApiMethod

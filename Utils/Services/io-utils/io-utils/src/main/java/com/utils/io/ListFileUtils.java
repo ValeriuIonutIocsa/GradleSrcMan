@@ -9,6 +9,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.function.Consumer;
 
+import com.utils.annotations.ApiMethod;
 import com.utils.log.Logger;
 
 public final class ListFileUtils {
@@ -16,6 +17,7 @@ public final class ListFileUtils {
 	private ListFileUtils() {
 	}
 
+	@ApiMethod
 	public static void visitFiles(
 			final String rootDirPathString,
 			final Consumer<Path> visitDirectoryConsumer,
@@ -75,6 +77,7 @@ public final class ListFileUtils {
 		}
 	}
 
+	@ApiMethod
 	public static void visitFilesRecursively(
 			final String rootDirPathString,
 			final Consumer<Path> visitDirectoryConsumer,

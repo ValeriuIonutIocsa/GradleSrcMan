@@ -4,16 +4,18 @@ import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.utils.annotations.ApiMethod;
 import com.utils.string.characters.SpecialCharacterUtils;
+import com.utils.string.converters.ConverterInstant;
 
 public final class StrUtils {
 
@@ -710,6 +712,14 @@ public final class StrUtils {
 
 	@ApiMethod
 	public static String durationToString(
+			final Instant start) {
+
+		final Duration duration = Duration.between(start, Instant.now());
+		return durationToString(duration);
+	}
+
+	@ApiMethod
+	public static String durationToString(
 			final Duration duration) {
 
 		final StringBuilder stringBuilder = new StringBuilder();
@@ -839,6 +849,26 @@ public final class StrUtils {
 	}
 
 	@ApiMethod
+	public static String removePrefixIgnoreCase(
+			final String str,
+			final String prefix) {
+
+		final String resultStr;
+		if (str != null) {
+
+			if (StringUtils.startsWithIgnoreCase(str, prefix)) {
+				resultStr = str.substring(prefix.length());
+			} else {
+				resultStr = str;
+			}
+
+		} else {
+			resultStr = null;
+		}
+		return resultStr;
+	}
+
+	@ApiMethod
 	public static String removeSuffix(
 			final String str,
 			final String suffix) {
@@ -859,21 +889,61 @@ public final class StrUtils {
 	}
 
 	@ApiMethod
+	public static String removeSuffixIgnoreCase(
+			final String str,
+			final String suffix) {
+
+		final String resultStr;
+		if (str != null) {
+
+			if (StringUtils.endsWithIgnoreCase(str, suffix)) {
+				resultStr = str.substring(0, str.length() - suffix.length());
+			} else {
+				resultStr = str;
+			}
+
+		} else {
+			resultStr = null;
+		}
+		return resultStr;
+	}
+
+	@ApiMethod
 	public static String createDateTimeString() {
 
-		return new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+		final DateTimeFormatter dateTimeFormatter =
+				DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+						.withLocale(Locale.US).withZone(ZoneId.systemDefault());
+		return dateTimeFormatter.format(Instant.now());
 	}
 
 	@ApiMethod
 	public static String createPathDateTimeString() {
 
-		return new SimpleDateFormat("dd_MMM_yyyy__hh_mm_ss_SSS__zzz", Locale.US).format(new Date());
+		final DateTimeFormatter dateTimeFormatter =
+				DateTimeFormatter.ofPattern("dd_MMM_yyyy__HH_mm_ss_SSS__z")
+						.withLocale(Locale.US).withZone(ZoneId.systemDefault());
+		String pathDateTimeString = dateTimeFormatter.format(Instant.now());
+		pathDateTimeString = StringUtils.replaceChars(pathDateTimeString, '/', '_');
+		pathDateTimeString = StringUtils.replaceChars(pathDateTimeString, ';', '_');
+		return pathDateTimeString;
 	}
 
 	@ApiMethod
 	public static String createDisplayDateTimeString() {
 
-		return new SimpleDateFormat("dd MMM yyyy, hh:mm:ss zzz", Locale.US).format(new Date());
+		final Instant instant = Instant.now();
+		return createDisplayDateTimeString(instant);
+	}
+
+	@ApiMethod
+	public static String createDisplayDateTimeString(
+			final Instant instant) {
+
+		final DateTimeFormatter dateTimeFormatter =
+				DateTimeFormatter.ofPattern(ConverterInstant.FULL_DATE_FORMAT)
+						.withLocale(Locale.US).withZone(ZoneId.systemDefault());
+		return dateTimeFormatter.format(instant);
 	}
 
 	@ApiMethod

@@ -3,6 +3,8 @@ package com.utils.io.zip;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.utils.log.progress.ProgressIndicatorConsole;
+import com.utils.log.progress.ProgressIndicators;
 import com.utils.string.StrUtils;
 
 class ZipFileExtractor7zTest {
@@ -21,11 +23,17 @@ class ZipFileExtractor7zTest {
 			zipArchiveFilePathString = "D:\\IVI_MISC\\Misc\\mnf\\test\\pic1.jpg.zip";
 			dstFolderPathString = "D:\\IVI_MISC\\Misc\\mnf\\test";
 
+		} else if (input == 21) {
+			zipArchiveFilePathString = "C:\\IVI\\Poli.zip";
+			dstFolderPathString = "C:\\IVI";
+
 		} else {
 			throw new RuntimeException();
 		}
 
 		final boolean deleteExisting = true;
+
+		ProgressIndicators.setInstance(ProgressIndicatorConsole.INSTANCE);
 
 		final ZipFileExtractor7z zipFileExtractor7z = new ZipFileExtractor7z("7z",
 				zipArchiveFilePathString, dstFolderPathString, deleteExisting);

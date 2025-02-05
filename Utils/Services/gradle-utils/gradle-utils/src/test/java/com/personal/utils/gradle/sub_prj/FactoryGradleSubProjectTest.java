@@ -13,8 +13,8 @@ class FactoryGradleSubProjectTest {
 	@Test
 	void testNewInstance() {
 
-		final String projectPathString = "C:\\IVI\\Prog\\JavaGradle\\UtilsManager\\" +
-				"Projects\\Personal\\UtilsManagerAllModules\\UtilsManagerAllModules";
+		final String projectPathString = "C:\\IVI\\Prog\\JavaGradle\\Scripts\\General\\" +
+				"UtilsManager\\Projects\\Personal\\UtilsManagerAllModules\\UtilsManagerAllModules";
 		final Map<String, GradleSubProject> gradleSubProjectsByPathMap = new HashMap<>();
 		FactoryGradleSubProject.newInstance(projectPathString, gradleSubProjectsByPathMap);
 

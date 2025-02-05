@@ -12,8 +12,8 @@ class GradleSubProjectUtilsTest {
 	@Test
 	void testExecuteSubProjectDependencyTreeCommand() {
 
-		final String projectPathString = "C:\\IVI\\Prog\\JavaGradle\\UtilsManager\\" +
-				"Projects\\Personal\\UtilsManagerAllModules\\UtilsManagerAllModules";
+		final String projectPathString = "C:\\IVI\\Prog\\JavaGradle\\Scripts\\General\\" +
+				"UtilsManager\\Projects\\Personal\\UtilsManagerAllModules\\UtilsManagerAllModules";
 		final List<String> lineList =
 				GradleSubProjectUtils.executeSubProjectDependencyTreeCommand(projectPathString);
 		Assertions.assertNotNull(lineList);

@@ -5,6 +5,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.utils.io.PathUtils;
 import com.utils.io.processes.InputStreamReaderThread;
 import com.utils.io.processes.ReadBytesHandlerLinesCollect;
@@ -24,6 +26,10 @@ public final class GradleSubProjectUtils {
 			final String gradleWrapperPathString = PathUtils.computePath(projectPathString, "gradlew.bat");
 			commandList.add(gradleWrapperPathString);
 			commandList.add("subProjectDependencyTree");
+			commandList.add("--console=plain");
+
+			Logger.printProgress("executing command:");
+			Logger.printLine(StringUtils.join(commandList, " "));
 
 			final ProcessBuilder processBuilder = new ProcessBuilder()
 					.command(commandList)

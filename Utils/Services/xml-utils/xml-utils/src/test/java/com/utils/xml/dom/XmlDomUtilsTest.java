@@ -27,7 +27,7 @@ class XmlDomUtilsTest {
 			validatedDocument = XmlDomUtils.openAndValidateDocumentResourceSchema(
 					inputStream, testXsdResourceFilePath);
 		}
-		final boolean validationSuccessful = validatedDocument.isValidationSuccessful();
+		final boolean validationSuccessful = validatedDocument.validationSuccessful();
 		Assertions.assertTrue(validationSuccessful);
 	}
 
