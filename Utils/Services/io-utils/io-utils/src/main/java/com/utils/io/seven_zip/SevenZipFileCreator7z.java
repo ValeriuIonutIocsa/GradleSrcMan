@@ -19,6 +19,7 @@ import com.utils.string.StrUtils;
 public final class SevenZipFileCreator7z {
 
 	private final String sevenZipExecutablePathString;
+	private final int threadCount;
 	private final int compressionLevel;
 	private final String inputFilePathString;
 	private final String archiveFilePathString;
@@ -28,12 +29,14 @@ public final class SevenZipFileCreator7z {
 
 	public SevenZipFileCreator7z(
 			final String sevenZipExecutablePathString,
+			final int threadCount,
 			final int compressionLevel,
 			final String inputFilePathString,
 			final String archiveFilePathString,
 			final boolean deleteExisting) {
 
 		this.sevenZipExecutablePathString = sevenZipExecutablePathString;
+		this.threadCount = threadCount;
 		this.compressionLevel = compressionLevel;
 		this.inputFilePathString = inputFilePathString;
 		this.archiveFilePathString = archiveFilePathString;
@@ -71,6 +74,9 @@ public final class SevenZipFileCreator7z {
 						commandPartList.add(sevenZipExecutablePathString);
 						commandPartList.add("a");
 						commandPartList.add("-bsp1");
+						if (threadCount >= 1) {
+							commandPartList.add("-mmt=" + threadCount);
+						}
 						commandPartList.add("-mx=" + compressionLevel);
 						commandPartList.add(archiveFilePathString);
 						commandPartList.add(inputFilePathString);
@@ -103,8 +109,8 @@ public final class SevenZipFileCreator7z {
 				}
 			}
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 
 		} finally {
 			ProgressIndicators.getInstance().update(0.0);

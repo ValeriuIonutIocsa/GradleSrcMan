@@ -26,7 +26,7 @@ public final class GZipCompressionUtils {
 				gzipOutputStream.close();
 				compressedData = byteArrayOutputStream.toByteArray();
 
-			} catch (final Exception ignored) {
+			} catch (final Throwable ignored) {
 			}
 		}
 		return compressedData;
@@ -49,7 +49,7 @@ public final class GZipCompressionUtils {
 				}
 				decompressedData = byteArrayOutputStream.toByteArray();
 
-			} catch (final Exception ignored) {
+			} catch (final Throwable ignored) {
 			}
 		}
 		return decompressedData;

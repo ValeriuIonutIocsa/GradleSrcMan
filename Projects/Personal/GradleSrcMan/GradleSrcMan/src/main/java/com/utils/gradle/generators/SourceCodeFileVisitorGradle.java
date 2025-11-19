@@ -76,8 +76,8 @@ class SourceCodeFileVisitorGradle extends SimpleFileVisitor<Path> {
 
 				Files.copy(file, resolvedPath, copyOptionArray);
 
-			} catch (final Exception exc) {
-				Logger.printException(exc);
+			} catch (final Throwable throwable) {
+				Logger.printThrowable(throwable);
 			}
 		}
 		return FileVisitResult.CONTINUE;

@@ -3,6 +3,7 @@ package com.utils.gradle.settings;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -40,13 +41,29 @@ public final class FactoryGradleSrcManSettings {
 					final String projectPathString = projectElement.getAttribute("Path");
 					projectPathStringList.add(projectPathString);
 				}
+				if (projectPathStringList.isEmpty()) {
+					Logger.printError("no project paths found in the settings file");
 
-				gradleSrcManSettings = new GradleSrcManSettings(projectPathStringList);
+				} else {
+					String outputFolderPathString = null;
+					final Element outputFolderElement = XmlDomUtils
+							.getFirstChildElementByTagName(documentElement, "OutputFolder");
+					if (outputFolderElement != null) {
+						outputFolderPathString = outputFolderElement.getAttribute("Path");
+					}
+					if (StringUtils.isBlank(outputFolderPathString)) {
+						Logger.printError("missing output folder path in the settings file");
+
+					} else {
+						gradleSrcManSettings =
+								new GradleSrcManSettings(projectPathStringList, outputFolderPathString);
+					}
+				}
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to parse the settings file");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return gradleSrcManSettings;
 	}

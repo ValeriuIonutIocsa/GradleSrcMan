@@ -31,14 +31,14 @@ class XmlLongestChainParserTest {
 		final String xmlFilePathString;
 		final int input = StrUtils.tryParsePositiveInt("12");
 		if (input == 1) {
-			xmlFilePathString = "D:\\VT_IVI_MISC\\Tmp\\CRO\\ProjectAnalyzer\\Outputs\\" +
+			xmlFilePathString = "D:\\IVI_WORK\\Tmp\\CRO\\ProjectAnalyzer\\Outputs\\" +
 					"BMG12_0U0_I00-symbol_types_local_5.0.24.xml";
 
 		} else if (input == 11) {
-			xmlFilePathString = "D:\\VT_IVI_MISC\\Tmp\\CRO\\ProjectAnalyzer\\Outputs\\" +
+			xmlFilePathString = "D:\\IVI_WORK\\Tmp\\CRO\\ProjectAnalyzer\\Outputs\\" +
 					"FOH02_0U0_306-symbol_types_local_5.0.24.xml";
 		} else if (input == 12) {
-			xmlFilePathString = "D:\\VT_IVI_MISC\\Tmp\\CRO\\ProjectAnalyzer\\TestData\\SymbolTypes\\" +
+			xmlFilePathString = "D:\\IVI_WORK\\Tmp\\CRO\\ProjectAnalyzer\\TestData\\SymbolTypes\\" +
 					"FOH02_0U0_306_Os_CounterAddRelJob_symbol_types.xml";
 		} else {
 			throw new RuntimeException();

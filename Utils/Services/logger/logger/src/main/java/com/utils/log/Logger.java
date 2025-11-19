@@ -3,7 +3,7 @@ package com.utils.log;
 import java.time.Duration;
 import java.time.Instant;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.lang3.SystemUtils;
 
 import com.utils.annotations.ApiMethod;
@@ -120,41 +120,41 @@ public final class Logger {
 	}
 
 	@ApiMethod
-	public static void printException(
+	public static void printThrowable(
 			final Throwable throwable) {
 
-		final String message = exceptionToString(throwable);
-		printMessage(MessageLevel.EXCEPTION, message);
+		final String message = throwableToString(throwable);
+		printMessage(MessageLevel.THROWABLE, message);
 	}
 
 	@ApiMethod
-	public static String exceptionToString(
+	public static String throwableToString(
 			final Throwable throwable) {
 
-		final StringBuilder sbExceptionString = new StringBuilder();
+		final StringBuilder sbThrowableString = new StringBuilder();
 		if (throwable == null) {
-			sbExceptionString.append("NULL exception");
+			sbThrowableString.append("NULL throwable");
 
 		} else {
-			final Class<? extends Throwable> excClass = throwable.getClass();
-			final String excClassSimpleName = excClass.getSimpleName();
-			sbExceptionString.append("exception of class \"").append(excClassSimpleName)
+			final Class<? extends Throwable> throwableClass = throwable.getClass();
+			final String throwableClassSimpleName = throwableClass.getSimpleName();
+			sbThrowableString.append("throwable of class \"").append(throwableClassSimpleName)
 					.append("\" has occurred").append(System.lineSeparator());
 
-			final String excMessage = throwable.getMessage();
-			sbExceptionString.append(excMessage).append(System.lineSeparator());
+			final String throwableMessage = throwable.getMessage();
+			sbThrowableString.append(throwableMessage).append(System.lineSeparator());
 
 			final StackTraceElement[] stackTraceElementArray = throwable.getStackTrace();
 			for (int i = 0; i < stackTraceElementArray.length; i++) {
 
 				final StackTraceElement stackTraceElement = stackTraceElementArray[i];
-				sbExceptionString.append(stackTraceElement);
+				sbThrowableString.append(stackTraceElement);
 				if (i < stackTraceElementArray.length - 1) {
-					sbExceptionString.append(System.lineSeparator());
+					sbThrowableString.append(System.lineSeparator());
 				}
 			}
 		}
-		return sbExceptionString.toString();
+		return sbThrowableString.toString();
 	}
 
 	@ApiMethod
@@ -206,8 +206,14 @@ public final class Logger {
 			final MessageLevel info,
 			final String message) {
 
+		final String userHomeReplacement;
+		if (SystemUtils.IS_OS_WINDOWS) {
+			userHomeReplacement = "%USERPROFILE%";
+		} else {
+			userHomeReplacement = "~";
+		}
 		final String processedMessage =
-				StringUtils.replace(message, SystemUtils.USER_HOME, "%USERPROFILE%");
+				Strings.CS.replace(message, SystemUtils.USER_HOME, userHomeReplacement);
 		messageConsumer.printMessage(info, processedMessage);
 	}
 

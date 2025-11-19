@@ -15,7 +15,7 @@ class CliUtilsTest {
 		final String commandString;
 		final int input = TestInputUtils.parseTestInputNumber("1");
 		if (input == 1) {
-			commandString = "cmd /c \"C:\\IVI\\Vitesco\\Prog\\JavaGradle\\CRO\\" +
+			commandString = "cmd /c \"C:\\IVI_WORK\\Prog\\JavaGradle\\CRO\\" +
 					"ProjectAnalyzer\\Projects\\CRO\\SpaBackend\\SpaBackend\\" +
 					"hook_scripts\\timed_event_hook\\timed event hook script.bat\"";
 		} else {

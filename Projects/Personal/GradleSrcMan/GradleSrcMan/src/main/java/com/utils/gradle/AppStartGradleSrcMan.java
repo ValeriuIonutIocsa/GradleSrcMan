@@ -29,6 +29,7 @@ final class AppStartGradleSrcMan {
 			final String[] args) {
 
 		final Instant start = Instant.now();
+		Logger.printProgress("starting GradleSrcMan");
 
 		final Map<String, String> cliArgsByNameMap = new HashMap<>();
 		CliUtils.fillCliArgsByNameMap(args, cliArgsByNameMap);
@@ -40,8 +41,7 @@ final class AppStartGradleSrcMan {
 		final GradleSrcManSettings gradleSrcManSettings = FactoryGradleSrcManSettings.newInstance();
 		if (gradleSrcManSettings != null) {
 
-			final String outputFolderPathString =
-					PathUtils.computePath(PathUtils.createRootPath(), "IVI_MISC", "Tmp", "GradleSrcMan");
+			final String outputFolderPathString = gradleSrcManSettings.getOutputFolderPathString();
 			Logger.printStatus("Output folder path:" + System.lineSeparator() + outputFolderPathString);
 
 			final List<String> projectPathStringList = gradleSrcManSettings.getProjectPathStringList();
@@ -89,10 +89,10 @@ final class AppStartGradleSrcMan {
 				}
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to run Gradle source code manager " +
 					"on project " + projectName);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 }

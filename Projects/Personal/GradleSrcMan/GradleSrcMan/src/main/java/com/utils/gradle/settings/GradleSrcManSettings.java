@@ -7,11 +7,14 @@ import com.utils.string.StrUtils;
 public class GradleSrcManSettings {
 
 	private final List<String> projectPathStringList;
+	private final String outputFolderPathString;
 
 	GradleSrcManSettings(
-			final List<String> projectPathStringList) {
+			final List<String> projectPathStringList,
+			final String outputFolderPathString) {
 
 		this.projectPathStringList = projectPathStringList;
+		this.outputFolderPathString = outputFolderPathString;
 	}
 
 	@Override
@@ -21,5 +24,9 @@ public class GradleSrcManSettings {
 
 	public List<String> getProjectPathStringList() {
 		return projectPathStringList;
+	}
+
+	public String getOutputFolderPathString() {
+		return outputFolderPathString;
 	}
 }

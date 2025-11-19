@@ -8,7 +8,7 @@ class FolderDeleterWinTest {
 	@Test
 	void testDeleteFolder() {
 
-		final String folderPathString = "D:\\IVI_MISC\\Tmp\\io-utils\\test_folder";
+		final String folderPathString = "D:\\IVI\\Tmp\\io-utils\\test_folder";
 
 		final boolean success = new FolderDeleterWin().deleteFolder(folderPathString, true, true);
 		Assertions.assertTrue(success);
@@ -17,7 +17,7 @@ class FolderDeleterWinTest {
 	@Test
 	void testCleanFolder() {
 
-		final String folderPathString = "D:\\IVI_MISC\\Tmp\\io-utils\\test_folder";
+		final String folderPathString = "D:\\IVI\\Tmp\\io-utils\\test_folder";
 
 		final boolean success = new FolderDeleterWin().cleanFolder(folderPathString, true, true);
 		Assertions.assertTrue(success);

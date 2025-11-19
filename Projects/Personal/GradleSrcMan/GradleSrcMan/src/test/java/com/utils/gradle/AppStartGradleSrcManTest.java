@@ -26,7 +26,7 @@ class AppStartGradleSrcManTest {
 		}
 
 		final String rootOutputFolderPathString =
-				PathUtils.computePath(PathUtils.createRootPath(), "IVI_MISC", "Tmp", "GradleSrcMan");
+				PathUtils.computePath(PathUtils.createRootPath(), "IVI", "Tmp", "GradleSrcMan");
 		Logger.printStatus("Output folder path:" + System.lineSeparator() + rootOutputFolderPathString);
 
 		AppStartGradleSrcMan.work(projectPathString, rootOutputFolderPathString);

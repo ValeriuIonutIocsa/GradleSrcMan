@@ -45,7 +45,7 @@ public class FileLocker {
 					bufferedWriter.write(text);
 				}
 
-			} catch (final Exception ignored) {
+			} catch (final Throwable ignored) {
 				success = false;
 			}
 			if (success) {
@@ -56,9 +56,9 @@ public class FileLocker {
 				fileLock = fileChannel.lock();
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to acquire the " + lockerName + " file lock");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return success;
 	}
@@ -87,9 +87,9 @@ public class FileLocker {
 				}
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to release the " + lockerName + " file lock");
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 

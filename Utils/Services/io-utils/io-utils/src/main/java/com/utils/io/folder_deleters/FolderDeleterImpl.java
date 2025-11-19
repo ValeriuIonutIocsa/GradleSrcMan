@@ -77,12 +77,12 @@ class FolderDeleterImpl implements FolderDeleter {
 			});
 			success = true;
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			if (verboseError) {
 				Logger.printError("failed to delete folder:" +
 						System.lineSeparator() + folderPathString);
 			}
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return success;
 	}
@@ -145,8 +145,8 @@ class FolderDeleterImpl implements FolderDeleter {
 			});
 			success = true;
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 
 		if (!success) {
@@ -212,8 +212,8 @@ class FolderDeleterImpl implements FolderDeleter {
 				});
 				success = true;
 
-			} catch (final Exception exc) {
-				Logger.printException(exc);
+			} catch (final Throwable throwable) {
+				Logger.printThrowable(throwable);
 			}
 
 			if (!success) {

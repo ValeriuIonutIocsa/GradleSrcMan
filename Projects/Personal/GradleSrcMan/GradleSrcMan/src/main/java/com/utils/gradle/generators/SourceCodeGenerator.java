@@ -88,8 +88,8 @@ public final class SourceCodeGenerator {
 				Files.walkFileTree(dependencyTreeProjectPath, sourceCodeFileVisitorGradle);
 			}
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 	}
 
@@ -121,8 +121,8 @@ public final class SourceCodeGenerator {
 				}
 			}
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 	}
 
@@ -235,8 +235,8 @@ public final class SourceCodeGenerator {
 			final Path srcFilePath = Paths.get(srcFilePathString);
 			Files.copy(srcFilePath, dstFilePath, copyOptionArray);
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 	}
 

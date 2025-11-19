@@ -22,8 +22,8 @@ public class FileDeleterWin extends FileDeleterImpl {
 
 			return deleteFileWin(filePathString);
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 
 		if (!success) {

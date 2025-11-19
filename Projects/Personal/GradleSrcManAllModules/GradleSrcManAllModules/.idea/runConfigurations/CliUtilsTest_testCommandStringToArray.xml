@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="CliUtilsTest.testCommandStringToArray" type="JUnit" factoryName="JUnit" folderName="io-utils"
+                   nameIsGenerated="true">
+        <module name="GradleSrcManAllModules.io-utils.test"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="com.utils.cli.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <option name="PACKAGE_NAME" value="com.utils.cli"/>
+        <option name="MAIN_CLASS_NAME" value="com.utils.cli.CliUtilsTest"/>
+        <option name="METHOD_NAME" value="testCommandStringToArray"/>
+        <option name="TEST_OBJECT" value="method"/>
+        <method v="2">
+            <option name="MakeProject" enabled="true"/>
+        </method>
+    </configuration>
+</component>

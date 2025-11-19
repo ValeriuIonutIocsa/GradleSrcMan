@@ -49,10 +49,10 @@ public final class SplitFileUtils {
 				}
 			}
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to split into chucks the file:" +
 					System.lineSeparator() + filePathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 }

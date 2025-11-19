@@ -1,7 +1,7 @@
-String projectPath = file('.').getAbsolutePath()
-String rootDirPath = file('../../../../').getAbsolutePath()
+final String projectPath = file('.').getAbsolutePath()
+final String rootDirPath = file('../../../../').getAbsolutePath()
 gradle.ext.rootDirPath = rootDirPath
-String[] subProjectsRelativePaths = [
+final String[] subProjectsRelativePaths = [
         '/Utils/Services/test-utils/test-utils'
 ]
 

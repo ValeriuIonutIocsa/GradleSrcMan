@@ -49,8 +49,8 @@ public final class ObjUtils {
 
 			objectOutputStream.writeObject(object);
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 		final byte[] byteArray = byteArrayOutputStream.toByteArray();
 		return Base64.getEncoder().encodeToString(byteArray);
@@ -72,8 +72,8 @@ public final class ObjUtils {
 				objectT = objectClass.cast(object);
 			}
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 		return objectT;
 	}

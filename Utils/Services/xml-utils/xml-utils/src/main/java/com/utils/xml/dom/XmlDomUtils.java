@@ -341,6 +341,38 @@ public final class XmlDomUtils {
 	}
 
 	@ApiMethod
+	public static void configureChildAttributeValue(
+			final Element parentElement,
+			final String tagName,
+			final String attributeName,
+			final String attributeValue) {
+
+		Element element = XmlDomUtils.getFirstChildElementByTagName(parentElement, tagName);
+		if (element == null) {
+
+			final Document document = parentElement.getOwnerDocument();
+			element = document.createElement(tagName);
+
+			parentElement.appendChild(element);
+		}
+		element.setAttribute(attributeName, attributeValue);
+	}
+
+	@ApiMethod
+	public static String computeChildAttributeValue(
+			final Element parentElement,
+			final String tagName,
+			final String attributeName) {
+
+		String attributeValue = "";
+		final Element element = XmlDomUtils.getFirstChildElementByTagName(parentElement, tagName);
+		if (element != null) {
+			attributeValue = element.getAttribute(attributeName);
+		}
+		return attributeValue;
+	}
+
+	@ApiMethod
 	public static String computeAttributeValue(
 			final Element parentElement,
 			final String tagName,
@@ -425,7 +457,7 @@ public final class XmlDomUtils {
 	}
 
 	@ApiMethod
-	public static void createChildWithTextContent(
+	public static Element createChildWithTextContent(
 			final Element parentElement,
 			final String childTagName,
 			final String textContent) {
@@ -435,6 +467,8 @@ public final class XmlDomUtils {
 		childElement.setTextContent(textContent);
 
 		parentElement.appendChild(childElement);
+
+		return childElement;
 	}
 
 	@ApiMethod

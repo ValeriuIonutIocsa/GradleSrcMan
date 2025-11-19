@@ -22,12 +22,12 @@ public class FolderDeleterWin extends FolderDeleterImpl {
 
 			success = deleteFolderWin(folderPathString);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			if (verboseError) {
 				Logger.printError("failed to delete folder:" +
 						System.lineSeparator() + folderPathString);
 			}
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return success;
 	}
@@ -59,12 +59,12 @@ public class FolderDeleterWin extends FolderDeleterImpl {
 
 			success = cleanFolderWin(folderPathString);
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			if (verboseError) {
 				Logger.printError("failed to clean folder:" +
 						System.lineSeparator() + folderPathString);
 			}
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 		return success;
 	}

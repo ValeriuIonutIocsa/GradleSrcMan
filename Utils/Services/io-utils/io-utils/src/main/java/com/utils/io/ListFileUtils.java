@@ -70,10 +70,10 @@ public final class ListFileUtils {
 				}
 			});
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to visit files recursively of directory:" +
 					System.lineSeparator() + rootDirPathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 
@@ -126,10 +126,10 @@ public final class ListFileUtils {
 				}
 			});
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			Logger.printError("failed to visit files recursively of directory:" +
 					System.lineSeparator() + rootDirPathString);
-			Logger.printException(exc);
+			Logger.printThrowable(throwable);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" factoryName="JUnit" folderName="GradleSrcMan" name="AppStartGradleSrcManTest.work" nameIsGenerated="true" type="JUnit">
+    <configuration default="false" name="AppStartGradleSrcManTest.work" type="JUnit" factoryName="JUnit" folderName="GradleSrcMan"
+                   nameIsGenerated="true">
         <module name="GradleSrcManAllModules.GradleSrcMan.test"/>
         <extension name="coverage">
             <pattern>
@@ -12,7 +13,7 @@
         <option name="METHOD_NAME" value="work"/>
         <option name="TEST_OBJECT" value="method"/>
         <method v="2">
-            <option enabled="true" name="Make"/>
+            <option name="MakeProject" enabled="true"/>
         </method>
     </configuration>
 </component>

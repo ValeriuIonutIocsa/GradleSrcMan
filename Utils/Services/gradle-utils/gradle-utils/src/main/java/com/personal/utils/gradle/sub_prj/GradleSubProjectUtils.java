@@ -45,8 +45,8 @@ public final class GradleSubProjectUtils {
 
 			subProjectDependencyTreeOutputLineList = readBytesHandlerLinesCollect.getLineList();
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 		return subProjectDependencyTreeOutputLineList;
 	}

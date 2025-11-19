@@ -59,8 +59,8 @@ public final class DependencyTreeGenerator {
 
 			FactoryFileDeleter.getInstance().deleteFile(dotFilePathString, true, false);
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 	}
 

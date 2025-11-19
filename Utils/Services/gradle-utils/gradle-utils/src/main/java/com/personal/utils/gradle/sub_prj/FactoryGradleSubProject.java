@@ -3,7 +3,7 @@ package com.personal.utils.gradle.sub_prj;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import com.utils.log.Logger;
 import com.utils.string.StrUtils;
@@ -26,7 +26,7 @@ public final class FactoryGradleSubProject {
 				for (final String line : lineList) {
 
 					final String projectPathString = StrUtils.removePrefix(line, "project: ");
-					if (!StringUtils.equals(projectPathString, line)) {
+					if (!Strings.CS.equals(projectPathString, line)) {
 
 						gradleSubProject = new GradleSubProject(projectPathString);
 						gradleSubProjectsByPathMap.put(projectPathString, gradleSubProject);
@@ -35,7 +35,7 @@ public final class FactoryGradleSubProject {
 						if (gradleSubProject != null) {
 
 							final String subProjectPathString = StrUtils.removePrefix(line, "subProject: ");
-							if (!StringUtils.equals(subProjectPathString, line)) {
+							if (!Strings.CS.equals(subProjectPathString, line)) {
 
 								gradleSubProject.getDependencyPathSet().add(subProjectPathString);
 							}
@@ -44,8 +44,8 @@ public final class FactoryGradleSubProject {
 				}
 			}
 
-		} catch (final Exception exc) {
-			Logger.printException(exc);
+		} catch (final Throwable throwable) {
+			Logger.printThrowable(throwable);
 		}
 	}
 }

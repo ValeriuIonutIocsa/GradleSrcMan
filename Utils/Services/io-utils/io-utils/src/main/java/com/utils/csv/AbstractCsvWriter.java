@@ -47,11 +47,11 @@ public abstract class AbstractCsvWriter implements CsvWriter {
 
 			success = true;
 
-		} catch (final Exception exc) {
+		} catch (final Throwable throwable) {
 			if (StringUtils.isNotBlank(name)) {
 
 				Logger.printError("failed to write " + name);
-				Logger.printException(exc);
+				Logger.printThrowable(throwable);
 			}
 		}
 		return success;
